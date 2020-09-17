@@ -13,6 +13,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get(
+    '/',
+    function () {
+        return view('welcome');
+    }
+);
+Route::group(
+    ['namespace' => 'App\Http\Controllers'],
+    static function () {
+        Route::group(
+            ['prefix' => 'test'],
+            static function () {
+              Route::get('test', 'Billy\RequestController@index')->name('test');
+            }
+        );
+    }
+);
