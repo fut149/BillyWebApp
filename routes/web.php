@@ -23,10 +23,14 @@ Route::group(
     ['namespace' => 'App\Http\Controllers'],
     static function () {
         Route::group(
-            ['prefix' => 'test'],
+            ['prefix' => '/'],
             static function () {
               Route::get('test', 'Billy\RequestController@index')->name('test');
             }
         );
     }
 );
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
