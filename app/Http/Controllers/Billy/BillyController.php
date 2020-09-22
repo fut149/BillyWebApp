@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Billy;
 
 use App\Exceptions\BillyException;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 
-class RequestController extends Controller
+class BillyController extends Controller
 {
     private $token;
     private $apiUrl;
@@ -96,14 +97,18 @@ class RequestController extends Controller
         return $response['accountGroups'][0]['id'] ?? $response['accountGroups'][0]['id'];
     }
 
+    public function createUserInBilly(User $user){
+        return $this->createAccount($user->getAttributes());
+    }
+
     private function createAccount(array $data): string
     {
         $groupId = $this->createAccountGroup([]);
         $account = [
             'account' => [
                 "organizationId" => $this->organisationId,
-                "name" => "test",
-                "description" => "test",
+                "name" => $data['name'],
+                "description" => $data['email'],
                 "groupId" => $groupId,
 //                "accountGroup" => $group,
 //                "systemRole" => null,

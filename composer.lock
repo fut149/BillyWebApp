@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52849ff5215c08dc85cb1ae9bb5692f1",
+    "content-hash": "504f5cd2fbe1e58e48ee3c0553b7dca0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -970,21 +970,22 @@
         },
         {
             "name": "laravel/fortify",
-            "version": "v1.4.0",
+            "version": "v1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/fortify.git",
-                "reference": "a255ce7e12601eb2b4972397c9f94a3e4ca13d32"
+                "reference": "91518afbf3ce33d3e6b2a36b032e67e8474367e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/fortify/zipball/a255ce7e12601eb2b4972397c9f94a3e4ca13d32",
-                "reference": "a255ce7e12601eb2b4972397c9f94a3e4ca13d32",
+                "url": "https://api.github.com/repos/laravel/fortify/zipball/91518afbf3ce33d3e6b2a36b032e67e8474367e9",
+                "reference": "91518afbf3ce33d3e6b2a36b032e67e8474367e9",
                 "shasum": ""
             },
             "require": {
                 "bacon/bacon-qr-code": "^2.0",
                 "ext-json": "*",
+                "illuminate/support": "^8.0",
                 "php": "^7.3",
                 "pragmarx/google2fa": "^7.0|^8.0"
             },
@@ -1024,7 +1025,7 @@
                 "auth",
                 "laravel"
             ],
-            "time": "2020-09-14T18:51:28+00:00"
+            "time": "2020-09-20T16:37:38+00:00"
         },
         {
             "name": "laravel/framework",
@@ -1374,6 +1375,61 @@
                 "psysh"
             ],
             "time": "2020-08-11T19:28:08+00:00"
+        },
+        {
+            "name": "laravel/ui",
+            "version": "v2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/ui.git",
+                "reference": "2ccaa3b821ea8ac7e05393b946d0578bdb46099b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/ui/zipball/2ccaa3b821ea8ac7e05393b946d0578bdb46099b",
+                "reference": "2ccaa3b821ea8ac7e05393b946d0578bdb46099b",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^7.0|^8.0",
+                "illuminate/filesystem": "^7.0|^8.0",
+                "illuminate/support": "^7.0|^8.0",
+                "php": "^7.2.5"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Ui\\UiServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Ui\\": "src/",
+                    "Illuminate\\Foundation\\Auth\\": "auth-backend/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel UI utilities and presets.",
+            "keywords": [
+                "laravel",
+                "ui"
+            ],
+            "time": "2020-09-09T12:07:59+00:00"
         },
         {
             "name": "league/commonmark",

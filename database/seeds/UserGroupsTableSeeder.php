@@ -9,15 +9,14 @@ class UserGroupsTableSeeder extends Seeder
     public function __construct()
     {
         $this->usersGroups[] = [
-            'name' => 'group1',
+            'name' => 'default',
             'natureId'=>'expense',
             'priority'=> 0,
-        ];
-
-        $this->usersGroups[] = [
-            'name' => 'group2',
-            'natureId'=>'expense',
-            'priority'=> 0,
+            'billy_gorup_id' => '',
+            'billy_created_at' => date('Y-m-d H:i:s'),
+            'billy_updated_at' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
     }
 
@@ -26,9 +25,9 @@ class UserGroupsTableSeeder extends Seeder
      *
      * @return array
      */
-    public function getUsers(): array
+    public function getUserGroups(): array
     {
-        return $this->users;
+        return $this->usersGroups;
     }
 
     /**
