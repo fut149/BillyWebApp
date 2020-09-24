@@ -15,7 +15,7 @@ class CreateUserGroupsTable extends Migration
                 $table->text('name');
                 $table->string('natureId')->default('expense');
                 $table->integer('priority')->default(0);
-                $table->text('billy_gorup_id')->nullable();
+                $table->string('billy_gorup_id')->nullable();
                 $table->timestamp('billy_created_at')->nullable();
                 $table->timestamp('billy_updated_at')->nullable();
                 $table->timestamps();

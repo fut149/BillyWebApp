@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Contact;
+use App\Exceptions\HttpInvalidParamException;
 use App\Models\_Model as Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use PHPUnit\Exception;
 
 class _Controller extends Controller
 {
@@ -30,7 +34,7 @@ class _Controller extends Controller
      *
      * @var string
      */
-    protected $modelsDir = "App\Models\\";
+    protected $modelsDir = "App\\";
 
     /**
      * How many items to show per page
@@ -80,6 +84,7 @@ class _Controller extends Controller
     {
         if ( ! empty($this->modelName)) {
             $this->modelName = $this->modelsDir . $this->modelName;
+
             $this->model = new $this->modelName;
 
             $this->orderAble = $this->model->getOrderAble();
@@ -208,14 +213,20 @@ class _Controller extends Controller
     public function store(Request $request)
     {
         if ( ! $this->isValidated) {
-            $this->validateInput($request);
+            try {
+                $k=$this->validateInput($request);
+            }catch (\Exception $e){
+                throw new HttpInvalidParamException($e->getMessage(),400);
+            }
         }
-
         foreach ($this->model->getFillable() as $fillable) {
-
-            $this->model->$fillable = $request->filled($fillable)
-                ? $request->input($fillable)
-                : null;
+            if($fillable==='user_id'){
+                $this->model->user_id=auth()->user()->id;
+            }else {
+                $this->model->$fillable = $request->filled($fillable)
+                    ? $request->input($fillable)
+                    : $this->model->getDefaultValue($fillable);
+            }
         }
 
         if ( ! $this->withoutRelationInsert) {
@@ -225,7 +236,6 @@ class _Controller extends Controller
                 $this->model->$relationId = $relationRequest['data']['id'] ?? null;
             }
         }
-
         $this->model->save();
 
         $this->model->loadMissing($this->model->getWith());
@@ -244,19 +254,31 @@ class _Controller extends Controller
     public function update(Request $request, int $id)
     {
         if ( ! $this->isValidated) {
-            $this->validateInput($request, $id);
+            try {
+                $k=$this->validateInput($request);
+            }catch (\Exception $e){
+                throw new HttpInvalidParamException($e->getMessage(),400);
+            }
         }
-
         try {
             $this->model = $this->model->findOrFail($id);
+            if (method_exists($this->model, 'getAuth') && $this->model->getAuth() && $this->model->user_id!==auth()->user()->id) {
+                throw new \Exception('Not found',404);
+            }
         } catch (ModelNotFoundException $e) {
-            $this->response->errorNotFound();
+            throw new \Exception('Not found',404);
         }
 
         $fillables = $this->model->getFillable();
 
         foreach ($fillables as $fillable) {
-            if ($request->$fillable === null || $request->has($fillable)) {
+            if(strpos($fillable,'billy_')===0){
+                continue;
+            }elseif($fillable==='user_id'){
+                $this->model->user_id=auth()->user()->id;
+            }elseif($request->$fillable === null ){
+                $this->model->$fillable=$this->model->getDefaultValue($fillable);
+            }elseif ($request->has($fillable)){
                 $this->model->$fillable = $request->input($fillable);
             }
         }
@@ -268,7 +290,6 @@ class _Controller extends Controller
                 $this->model->$relationId = $relationRequest['data']['id'] ?? null;
             }
         }
-
         $this->model->save();
 
         // Refresh model data to populate all required values

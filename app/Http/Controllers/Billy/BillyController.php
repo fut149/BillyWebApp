@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Billy;
 
+use App\Contact;
 use App\Exceptions\BillyException;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Product;
 use Illuminate\Support\Facades\Http;
 
 class BillyController extends Controller
@@ -97,7 +99,8 @@ class BillyController extends Controller
         return $response['accountGroups'][0]['id'] ?? $response['accountGroups'][0]['id'];
     }
 
-    public function createUserInBilly(User $user){
+    public function createUserInBilly(User $user)
+    {
         return $this->createAccount($user->getAttributes());
     }
 
@@ -110,6 +113,7 @@ class BillyController extends Controller
                 "name" => $data['name'],
                 "description" => $data['email'],
                 "groupId" => $groupId,
+                "natureId" => "revenue",
 //                "accountGroup" => $group,
 //                "systemRole" => null,
 //                "isPaymentEnabled" => false,
@@ -123,67 +127,95 @@ class BillyController extends Controller
             ]
         ];
         $response = $this->request('post', '/accounts', $account)->json();
+//        dd($response,$account);
         return $response['accounts'][0]['id'] ?? $response['accounts'][0]['id'];
     }
 
-    private function createProduct(array $data)
+    private function getProductRequest(array $data): array
     {
-        $product = [
+        return [
             'product' => [
                 "organizationId" => $this->organisationId,
-                "name" => "Book 4",
-                "description" => "desc",
-                "accountId" => "4qAjMzZRRoO7sOAjzkorjw",//One my account
-                "inventoryAccountId" => null,
-                "suppliersProductNo" => "",
-//            "salesTaxRulesetId" => "K5A89XDhQJeiyC9HtTX6Hw",
-//            "isArchived" => false,
-//            "isInInventory" => false,
-//            "imageId" => null,
-//            "imageUrl" => null,
+                "name" => $data['name'],
+                "description" => $data['description'],
+                "accountId" => auth()->user()->billy_account_id,
+                "inventoryAccountId" => $data['inventoryAccountId'],
+                "suppliersProductNo" => $data['suppliersProductNo'],
+                "isArchived" => (int)$data['isArchived'],
+                "isInInventory" => (int)$data['isInInventory'],
+                "imageId" =>  $data['imageId'],
             ]
         ];
-        return $this->request('post', '/products', $product)->json();
     }
-    private function createContact(array $data)
+
+    private function storeProduct(array $data)
     {
-        $contact = [
+        $method = 'post';
+        $url = '/products';
+        if (isset($data['billy_product_id']) && !empty($data['billy_product_id'])) {
+            $url .= '/' . $data['billy_product_id'];
+            $method = 'put';
+        }
+        $response = $this->request(
+            $method,
+            $url,
+            $this->getProductRequest($data)
+        )->json();
+        return isset($response['products'][0]['id']) ? $response['products'][0]['id'] : null;
+    }
+
+    public function productInBilly(Product $product)
+    {
+        return $this->storeProduct($product->getAttributes());
+    }
+
+    public function contactInBilly(Contact $contact)
+    {
+        return $this->storeContact($contact->getAttributes());
+    }
+
+    private function getContactRequest(array $data): array
+    {
+        return [
             'contact' => [
-                        "type" => "company",
-                        "organizationId" => $this->organisationId,
-                        "name" => "Goshko",
-                        "countryId" => "BG",
-                        "street" => "Nikola Novi",
-//                        "cityId" => null,
-                        "cityText" => "Sofia",
-//                        "stateId" => null,
-                        "stateText" => "",
-//                        "zipcodeId" => null,
-                        "zipcodeText" => "1000",
-                        "phone" => "",
-//                        "fax" => "",
-//                        "currencyId" => null,
-//                        "registrationNo" => "",
-//                        "ean" => "",
-//                        "localeId" => null,
-//                        "isCustomer" => true,
-//                        "isSupplier" => false,
-//                        "paymentTermsMode" => null,
-//                        "paymentTermsDays" => null,
-//                        "accessCode" => "H6FRoslEBX7iOoVx",
-//                        "emailAttachmentDeliveryMode" => null,
-//                        "isArchived" => false,
-//                        "isSalesTaxExempt" => false,
-//                        "defaultExpenseProductDescription" => null,
-//                        "defaultExpenseAccountId" => null,
-//                        "defaultTaxRateId" => null,
+                "type" => $data['type'],
+                "organizationId" => $this->organisationId,
+                "name" => $data['name'],
+                "countryId" => strtoupper(trim($data['countryId'])),
+                "street" => $data['street'],
+                "cityText" => $data['cityText'],
+                "stateText" => $data['stateText'],
+                "zipcodeText" => $data['zipcodeText'],
+                "phone" => $data['phone'],
             ]
         ];
-        return $this->request('post', '/contacts', $contact)->json();
+    }
+
+    private function storeContact(array $data)
+    {
+        $method = 'post';
+        $url = '/contacts';
+        if (isset($data['billy_contact_id']) && !empty($data['billy_contact_id'])) {
+            $url .= '/' . $data['billy_contact_id'];
+            $method = 'put';
+        }
+        $response = $this->request(
+            $method,
+            $url,
+            $this->getContactRequest($data)
+        )->json();
+        return isset($response['contacts'][0]['id']) ? $response['contacts'][0]['id'] : null;
     }
 
     public function index()
     {
+        $response = $this->getResurse('/accounts');
+        foreach ($response as $acc){
+            if($acc['id']==='juBsyNOAQMeEp5B2fEEFXQ'){
+                dd($acc);
+            }
+        }
+        dd($response);
         dd($this->createContact([]));
         $response = $this->getResurse('/contacts');
         dd($response);
@@ -191,7 +223,6 @@ class BillyController extends Controller
         $response = $this->getResurse('/accountGroups');
         dd($response);
         dd($this->createAccount([]));
-        $response = $this->getResurse('/accounts');
         dd($response);
     }
 

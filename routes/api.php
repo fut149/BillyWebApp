@@ -16,27 +16,37 @@ use Illuminate\Support\Facades\Route;
 Route::group(
     [
         'namespace' => 'App\Http\Controllers',
-        'middleware' => 'api',
     ],
     static function () {
         Route::post('login', 'Auth\LoginController@login')->name('login');
         Route::post('register', 'Auth\RegisterController@register')->name('register');
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');
         Route::group(
-            ['middleware' => 'auth:sanctum'],
-            static function() {
-            Route::get(
-                'test',
-                static function () {
-                    echo 'TEST';
-                }
-            );
-        });
-        Route::middleware('auth:sanctum')->get
-        (
-            '/user',
-            function (Request $request) {
-                return $request->user();
+            ['prefix' => 'password'],
+            static function ($api) {
+                $api->post('email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name(
+                    'password.email'
+                );
+                $api->post('reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
+            }
+        );
+        Route::post('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+        Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name(
+            'verification.verify'
+        );
+        Route::group(
+            ['middleware' => 'auth'],
+            function () {
+                Route::resource('contacts','ContactsController');
+                Route::resource('products','ProductsController');
+                Route::resource('usersgroup','UsersGroupsController');
+                Route::get(
+                    '/user',
+                    function (Request $request) {
+                        return $request->user();
+                    }
+                );
+                Route::get('test','Billy\BillyController@index')->name('test');
             }
         );
     }

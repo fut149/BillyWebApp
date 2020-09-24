@@ -26,5 +26,15 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = false;
+
+    protected function sendResetResponse(Request $request, $response)
+    {
+        return 'Password_changed';
+    }
+
+    protected function sendResetFailedResponse(Request $request, $response)
+    {
+        throw new \Exception($response, 422);
+    }
 }

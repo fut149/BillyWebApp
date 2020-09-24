@@ -22,6 +22,11 @@ class _Model extends Model
     protected $filterAble;
 
     /**
+     * @var array $defaultValues of columns
+     */
+    protected $defaultValues =[];
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -54,6 +59,13 @@ class _Model extends Model
     }
 
     /**
+     * @return bool - view only user content
+     */
+    public function getAuth(){
+        return false;
+    }
+
+    /**
      * @return array
      */
     public function getOrderAble()
@@ -67,6 +79,15 @@ class _Model extends Model
     public function getFilterAble()
     {
         return $this->filterAble;
+    }
+
+    /**
+     * @param $column
+     * @return string|null default value or null
+     */
+    public function getDefaultValue($column)
+    {
+        return isset($this->defaultValues[$column]) ? $this->defaultValues[$column] : null;
     }
 
     /**

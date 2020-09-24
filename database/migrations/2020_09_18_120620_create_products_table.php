@@ -12,10 +12,10 @@ class CreateProductsTable extends Migration
             'products',
             function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->text('name');
+                $table->string('name');
                 $table->text('description')->nullable();
-                $table->text('inventoryAccountId')->nullable();
-                $table->text('suppliersProductNo')->nullable();
+                $table->string('inventoryAccountId')->nullable();
+                $table->string('suppliersProductNo')->nullable();
                 $table->boolean('isArchived')->default(false);
                 $table->boolean('isInInventory')->default(false);
                 $table->string('imageId')->nullable();

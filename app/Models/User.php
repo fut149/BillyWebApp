@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Contact;
+use App\UserGroup;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -58,4 +60,14 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function userGroups()
+    {
+        return $this->hasOne(UserGroup::class, 'id', 'user_groups_id');
+    }
+
+    public function contact()
+    {
+        return $this->hasMany(Contact::class, 'user_id', 'id');
+    }
 }

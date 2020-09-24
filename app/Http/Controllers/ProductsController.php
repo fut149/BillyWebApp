@@ -3,82 +3,46 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Billy\BillyController;
 
-class ProductsController extends Controller
+class ProductsController extends _Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+    protected $modelName = 'Product';
+
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @param int|null $id
+     *
+     * @return mixed
      */
+    public function validateInput(Request $request, int $id = null)
+    {
+        $rules = [
+            'name' => 'required|min:5|max:255',
+        ];
+        return $request->validate($rules);
+    }
+
     public function store(Request $request)
     {
-        //
+        $product= parent::store($request);
+        $billyCtrl=new BillyController();
+        $product->billy_product_id=$billyCtrl->productInBilly($product);
+        $product->billy_created_at=date('Y-m-d H:i:s');
+        $product->billy_updated_at=date('Y-m-d H:i:s');
+        $product->save();
+        return $product;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function update(Request $request, int $id)
     {
-        //
+        $product=parent::update($request, $id);
+        $billyCtrl=new BillyController();
+        $product->billy_product_id=$billyCtrl->productInBilly($product);
+        $product->billy_updated_at=date('Y-m-d H:i:s');
+        $product->save();
+        return $product;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

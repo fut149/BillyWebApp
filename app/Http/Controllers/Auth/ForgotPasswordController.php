@@ -19,4 +19,14 @@ class ForgotPasswordController extends Controller
     */
 
     use SendsPasswordResetEmails;
+
+    protected function sendResetLinkResponse(Request $request, $response)
+    {
+        return  'Email Sent';
+    }
+
+    protected function sendResetLinkFailedResponse(Request $request, $response)
+    {
+        throw new \Exception('Invalid email', 422);
+    }
 }

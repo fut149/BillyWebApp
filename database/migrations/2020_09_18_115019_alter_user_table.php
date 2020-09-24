@@ -12,7 +12,7 @@ class AlterUserTable extends Migration
             'users',
             function (Blueprint $table) {
                 $table->unsignedBigInteger('user_groups_id')->nullable();
-                $table->text('billy_account_id')->nullable();
+                $table->string('billy_account_id')->nullable();
                 $table->timestamp('billy_created_at')->nullable();
                 $table->timestamp('billy_updated_at')->nullable();
                 $table->foreign('user_groups_id')

@@ -19,7 +19,7 @@ Route::group(
         Route::group(
             ['prefix' => '/'],
             static function () {
-              Route::get('test', 'Billy\RequestController@index')->name('test');
+              Route::get('test', 'Billy\BillyController@index')->name('test');
             }
         );
     }
@@ -29,6 +29,3 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
