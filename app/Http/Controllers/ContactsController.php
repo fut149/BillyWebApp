@@ -46,4 +46,13 @@ class ContactsController extends _Controller
         $contact->save();
         return $contact;
     }
+
+    public function destroy(int $id)
+    {
+        $this->model = $this->model->findOrFail($id);
+        $billyCtrl = new BillyController();
+        $billyCtrl->deleteContactInBilly($this->model);
+        $this->model->forceDelete();
+        return true;
+    }
 }

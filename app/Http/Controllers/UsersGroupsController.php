@@ -43,4 +43,13 @@ class UsersGroupsController extends _Controller
         $userGroup->save();
         return $userGroup;
     }
+
+    public function destroy(int $id)
+    {
+        $this->model = $this->model->findOrFail($id);
+        $billyCtrl = new BillyController();
+        $billyCtrl->deleteUserGroups($this->model);
+        $this->model->forceDelete();
+        return true;
+    }
 }

@@ -45,4 +45,13 @@ class ProductsController extends _Controller
         return $product;
     }
 
+    public function destroy(int $id)
+    {
+        $this->model = $this->model->findOrFail($id);
+        $billyCtrl = new BillyController();
+        $billyCtrl->deleteProductsInBilly($this->model);
+        $this->model->forceDelete();
+        return true;
+    }
+
 }

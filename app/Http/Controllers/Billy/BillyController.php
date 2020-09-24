@@ -119,14 +119,14 @@ class BillyController extends Controller
         return $this->storeAccountGroup($userGroup->getAttributes());
     }
 
-    public function createUserInBilly(User $user,string $billy_gorup_id='')
+    public function createUserInBilly(User $user, string $billy_gorup_id = '')
     {
-        return $this->createAccount($user->getAttributes(),$billy_gorup_id);
+        return $this->createAccount($user->getAttributes(), $billy_gorup_id);
     }
 
-    private function createAccount(array $data,string $billy_gorup_id=''): string
+    private function createAccount(array $data, string $billy_gorup_id = ''): string
     {
-        $groupId=!empty($billy_gorup_id) ? $billy_gorup_id : $this->storeAccountGroup([]);
+        $groupId = !empty($billy_gorup_id) ? $billy_gorup_id : $this->storeAccountGroup([]);
         $account = [
             'account' => [
                 "organizationId" => $this->organisationId,
@@ -192,6 +192,34 @@ class BillyController extends Controller
     public function contactInBilly(Contact $contact)
     {
         return $this->storeContact($contact->getAttributes());
+    }
+
+    public function deleteContactInBilly(Contact $contact)
+    {
+        $data = $contact->getAttributes();
+        $url = '/contacts/' . $data['billy_contact_id'];
+        return $this->request('delete', $url);
+    }
+
+    public function deleteProductsInBilly(Product $product)
+    {
+        $data = $product->getAttributes();
+        $url = '/products/' . $data['billy_product_id'];
+        return $this->request('delete', $url);
+    }
+
+    public function deleteUserGroups(UserGroup $userGroup)
+    {
+        $data = $userGroup->getAttributes();
+        $url = '/accountGroups/' . $data['billy_gorup_id'];
+        return $this->request('delete', $url);
+    }
+
+    public function deleteUser(UserGroup $userGroup)
+    {
+        $data = $userGroup->getAttributes();
+        $url = '/accounts/' . $data['billy_account_id'];
+        return $this->request('delete', $url);
     }
 
     private function getContactRequest(array $data): array
