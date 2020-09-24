@@ -46,4 +46,8 @@ class UserGroup extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected $querySearch = [
+        'name' => '%%',
+    ];
 }

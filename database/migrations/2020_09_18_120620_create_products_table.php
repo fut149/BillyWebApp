@@ -19,7 +19,6 @@ class CreateProductsTable extends Migration
                 $table->boolean('isArchived')->default(false);
                 $table->boolean('isInInventory')->default(false);
                 $table->string('imageId')->nullable();
-                $table->string('imageUrl')->nullable();
                 $table->string('billy_product_id')->nullable();
                 $table->unsignedBigInteger('user_id');
                 $table->foreign('user_id')

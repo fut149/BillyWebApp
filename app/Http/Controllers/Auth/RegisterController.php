@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\UserGroup;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
@@ -59,6 +60,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'user_groups_id' => ['sometimes','numeric'],
         ]);
        try{
           $validator->validate();
@@ -107,8 +109,9 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         $billyCtrl=new BillyController();
-        $user->billy_account_id=$billyCtrl->createUserInBilly($user);
-        $user->user_groups_id=1;
+        $user->user_groups_id=(int)$request->input('user_groups_id')>0 ? $request->input('user_groups_id'): 1;
+        $billy_gorup_id=UserGroup::findOrFail($user->user_groups_id)->billy_gorup_id;
+        $user->billy_account_id=$billyCtrl->createUserInBilly($user,$billy_gorup_id);
         $user->billy_created_at=date('Y-m-d H:i:s');
         $user->billy_updated_at=date('Y-m-d H:i:s');
         $user->save();

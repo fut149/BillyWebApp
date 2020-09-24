@@ -7,6 +7,7 @@ use App\Exceptions\BillyException;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Product;
+use App\UserGroup;
 use Illuminate\Support\Facades\Http;
 
 class BillyController extends Controller
@@ -81,32 +82,51 @@ class BillyController extends Controller
         return $this->request("GET", $url);
     }
 
-    private function createAccountGroup(array $data)
+    private function getAccountGroupRequest(array $data): array
     {
-        $accountGroup = [
+        return [
             'accountGroup' =>
                 [
                     "organizationId" => $this->organisationId,
-                    "name" => "test",
+                    "name" => isset($data['name']) ? $data['name'] : "default",
                     "type" => "group",
-                    "natureId" => "expense",
+                    "natureId" => isset($data['name']) ? $data['name'] : "expense",
                     "sumFrom" => null,
                     "style" => null,
-                    "priority" => 0
+                    "priority" => (isset($data['priority']) ? (int)$data['priority'] : 0)
                 ]
         ];
-        $response = $this->request('post', '/accountGroups', $accountGroup)->json();
-        return $response['accountGroups'][0]['id'] ?? $response['accountGroups'][0]['id'];
     }
 
-    public function createUserInBilly(User $user)
+    private function storeAccountGroup(array $data)
     {
-        return $this->createAccount($user->getAttributes());
+        $method = 'post';
+        $url = '/accountGroups';
+        if (isset($data['billy_gorup_id']) && !empty($data['billy_gorup_id'])) {
+            $url .= '/' . $data['billy_gorup_id'];
+            $method = 'put';
+        }
+        $response = $this->request(
+            $method,
+            $url,
+            $this->getAccountGroupRequest($data)
+        )->json();
+        return isset($response['accountGroups'][0]['id']) ? $response['accountGroups'][0]['id'] : null;
     }
 
-    private function createAccount(array $data): string
+    public function accountGroupInBilly(UserGroup $userGroup)
     {
-        $groupId = $this->createAccountGroup([]);
+        return $this->storeAccountGroup($userGroup->getAttributes());
+    }
+
+    public function createUserInBilly(User $user,string $billy_gorup_id='')
+    {
+        return $this->createAccount($user->getAttributes(),$billy_gorup_id);
+    }
+
+    private function createAccount(array $data,string $billy_gorup_id=''): string
+    {
+        $groupId=!empty($billy_gorup_id) ? $billy_gorup_id : $this->storeAccountGroup([]);
         $account = [
             'account' => [
                 "organizationId" => $this->organisationId,
@@ -143,7 +163,7 @@ class BillyController extends Controller
                 "suppliersProductNo" => $data['suppliersProductNo'],
                 "isArchived" => (int)$data['isArchived'],
                 "isInInventory" => (int)$data['isInInventory'],
-                "imageId" =>  $data['imageId'],
+                "imageId" => $data['imageId'],
             ]
         ];
     }
@@ -210,8 +230,8 @@ class BillyController extends Controller
     public function index()
     {
         $response = $this->getResurse('/accounts');
-        foreach ($response as $acc){
-            if($acc['id']==='juBsyNOAQMeEp5B2fEEFXQ'){
+        foreach ($response as $acc) {
+            if ($acc['id'] === 'juBsyNOAQMeEp5B2fEEFXQ') {
                 dd($acc);
             }
         }
