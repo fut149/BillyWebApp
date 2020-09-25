@@ -47,7 +47,8 @@ class BillyController extends Controller
             case 'post':
             case 'put':
             case 'delete':
-                $request = $request->$method($url, $data);
+                $request = $request->$method($url);
+                dd($request);
                 break;
             case 'get':
                 $request = $request->get($url);
@@ -255,14 +256,16 @@ class BillyController extends Controller
         return isset($response['contacts'][0]['id']) ? $response['contacts'][0]['id'] : null;
     }
 
+    public function getAllContacts(){
+        return $this->getResurse('/contacts');
+    }
+    public function getAllProducts(){
+        return $this->getResurse('/products');
+    }
+
     public function index()
     {
-        $response = $this->getResurse('/accounts');
-        foreach ($response as $acc) {
-            if ($acc['id'] === 'juBsyNOAQMeEp5B2fEEFXQ') {
-                dd($acc);
-            }
-        }
+       dd($this->getAllContacts());
         dd($response);
         dd($this->createContact([]));
         $response = $this->getResurse('/contacts');

@@ -37,6 +37,8 @@ Route::group(
         Route::group(
             ['middleware' => 'auth'],
             function () {
+                Route::get('contacts/import','ContactsController@import')->name('billi.import_contacts');
+                Route::get('products/import','ProductsController@import')->name('billi.import_products');
                 Route::resource('contacts','ContactsController');
                 Route::resource('products','ProductsController');
                 Route::resource('usersgroup','UsersGroupsController');

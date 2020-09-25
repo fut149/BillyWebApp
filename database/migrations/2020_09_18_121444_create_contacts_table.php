@@ -26,7 +26,7 @@ class CreateContactsTable extends Migration
                     ->on('users')
                     ->onUpdate('cascade');
 
-                $table->string('billy_contact_id')->nullable();
+                $table->string('billy_contact_id')->nullable()->unique();
                 $table->timestamp('billy_created_at')->nullable();
                 $table->timestamp('billy_updated_at')->nullable();
                 $table->timestamps();

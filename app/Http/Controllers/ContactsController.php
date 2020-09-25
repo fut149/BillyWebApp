@@ -55,4 +55,25 @@ class ContactsController extends _Controller
         $this->model->forceDelete();
         return true;
     }
+
+    public function import(){
+        $billyCtrl = new BillyController();
+        $contacts=$billyCtrl->getAllContacts();
+        foreach ($contacts as $contact){
+            $contact['user_id']=auth()->user()->id;
+            $contact['billy_contact_id']=$contact['id'];
+            $contact['billy_created_at']=date('Y-m-d H:i:s');
+            $contact['billy_updated_at']=date('Y-m-d H:i:s');
+            unset($contact['id']);
+            $this->model=new $this->model();
+            try {
+                $this->model->saveFromArray($contact);
+            }catch (\Exception $e){
+                if(strstr($e->getMessage(),'Duplicate entry')){
+                    continue;
+                }
+            }
+        }
+        return true;
+    }
 }
