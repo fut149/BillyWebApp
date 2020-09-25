@@ -26,7 +26,7 @@ git clone https://github.com/fut149/BillyWebApp.git
     DB_USERNAME=root
     DB_PASSWORD=
 - Billy Setup
-    BILLY_ACCESS_TOKEN=749f6c0f873eb98f16257eec9baa47c944617d34
+    BILLY_ACCESS_TOKEN=BILLY TOKEN
     BILLY_API_URL=https://api.billysbilling.com/v2
 ```
 - Database migrate
