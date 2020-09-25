@@ -1,10 +1,10 @@
 Billy Laravel API v1
 
-[![Postman Collection](https://www.getpostman.com/collections/d7d93005926f35e29ea6)](Postman)
+[![Postman Collection](https://www.getpostman.com/collections/d7d93005926f35e29ea6)]()
 
-[![Billy Api Documentation](https://www.billy.dk/api/#filtering)](BillyApi)
+[![Billy Api Documentation](https://www.billy.dk/api/#filtering)]()
 
-[![My Task](https://drive.google.com/file/d/1T-V7m8FdA4oXuDHzJI5yQGzwDq3XtPvj/view?usp=sharing)](MyTask)
+[![My Task](https://drive.google.com/file/d/1T-V7m8FdA4oXuDHzJI5yQGzwDq3XtPvj/view?usp=sharing)]()
 
 ## How to build
 
@@ -44,11 +44,11 @@ git clone https://github.com/fut149/BillyWebApp.git
    php artisan serve
 
 ```
-###Api Request URL
+##Api Request URL
 ```
 http://127.0.0.1:8000/api/
 
 ```
-###Postman Request Collection
+##Postman Request Collection
 
 https://www.getpostman.com/collections/d7d93005926f35e29ea6
