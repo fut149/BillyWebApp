@@ -49,10 +49,8 @@ class BillyController extends Controller
             $request = $request->$method($url,$data);
             break;
             case 'delete':
-                $request = $request->$method($url);
-                break;
             case 'get':
-                $request = $request->get($url);
+                $request = $request->$method($url);
                 break;
             default:
                 throw new \HttpException('Undefined http method!', 500);
