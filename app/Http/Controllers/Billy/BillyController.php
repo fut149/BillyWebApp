@@ -265,13 +265,7 @@ class BillyController extends Controller
 
     public function index()
     {
-        $response = $this->getResurse('/accountGroups');
-        dd($response);
-        dd($this->createProduct([]));
-        $response = $this->getResurse('/accountGroups');
-        dd($response);
-        dd($this->createAccount([]));
-        dd($response);
+        return $this->getResurse('/accountGroups');
     }
 
 }
