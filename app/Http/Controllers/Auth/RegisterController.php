@@ -88,6 +88,33 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+
+    /**
+     * @OA\Post(
+     * path="/api/register",
+     * summary="Register user",
+     * description="Register by email, password",
+     * operationId="authRegister",
+     * tags={"auth"},
+     * @OA\RequestBody(
+     *    required=true,
+     *    description="Pass user credentials",
+     *    @OA\JsonContent(
+     *       required={"email","password","name"},
+     *       @OA\Property(property="email", type="string", format="email", example="user1@mail.com"),
+     *       @OA\Property(property="password", type="string", format="password", example="PassWord12345"),
+     *       @OA\Property(property="name", type="string",format="text", example="gosho"),
+     *    ),
+     * ),
+     * @OA\Response(
+     *    response=422,
+     *    description="Wrong credentials response",
+     *    @OA\JsonContent(
+     *       @OA\Property(property="message", type="string", example="The email has already been taken.")
+     *        )
+     *     )
+     * )
+     */
     public function register(Request $request)
     {
 

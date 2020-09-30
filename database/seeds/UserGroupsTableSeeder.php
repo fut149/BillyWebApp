@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\UserGroup;
 
@@ -39,7 +41,7 @@ class UserGroupsTableSeeder extends Seeder
     public function run(): void
     {
         foreach ($this->usersGroups as $usersGroup) {
-            UserGroups::create($usersGroup);
+                   UserGroups::create($usersGroup);
         }
     }
 }

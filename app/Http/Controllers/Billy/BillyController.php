@@ -46,9 +46,10 @@ class BillyController extends Controller
         switch ($method) {
             case 'post':
             case 'put':
+            $request = $request->$method($url,$data);
+            break;
             case 'delete':
                 $request = $request->$method($url);
-                dd($request);
                 break;
             case 'get':
                 $request = $request->get($url);
@@ -148,7 +149,6 @@ class BillyController extends Controller
             ]
         ];
         $response = $this->request('post', '/accounts', $account)->json();
-//        dd($response,$account);
         return $response['accounts'][0]['id'] ?? $response['accounts'][0]['id'];
     }
 
@@ -265,10 +265,7 @@ class BillyController extends Controller
 
     public function index()
     {
-       dd($this->getAllContacts());
-        dd($response);
-        dd($this->createContact([]));
-        $response = $this->getResurse('/contacts');
+        $response = $this->getResurse('/accountGroups');
         dd($response);
         dd($this->createProduct([]));
         $response = $this->getResurse('/accountGroups');

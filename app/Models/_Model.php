@@ -4,6 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @OA\Schema(
+ * @OA\Property(property="created_at", type="string", format="date-time", description="Initial creation timestamp", readOnly="true"),
+ * @OA\Property(property="updated_at", type="string", format="date-time", description="Last update timestamp", readOnly="true"),
+ * )
+ * Class _Model
+ *
+ * @package App\Models
+ */
+
 class _Model extends Model
 {
 
@@ -149,22 +159,5 @@ class _Model extends Model
             }
         }
         $this->save();
-    }
-
-    /**
-     * Allows to store data for multiple languages in one attribute
-     *
-     * @param $attributeName
-     * @param $value
-     */
-    protected function setAttributeTranslation($attributeName, $value)
-    {
-        $attribute = [];
-        if ($this->{$attributeName}) {
-            $attribute = $this->{$attributeName};
-        }
-        $attribute[app()->getLocale()] = $value;
-
-        $this->attributes[$attributeName] = json_encode($attribute);
     }
 }
